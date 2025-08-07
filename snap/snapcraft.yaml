@@ -1,0 +1,43 @@
+name: obs-studio-advanced-masks
+base: core24
+version: 'v1.5.4'
+summary: Filters for creating intricate and customized masks
+description: |
+  OBS Advanced Masks is an open-source project designed to expand the masking functionalities within OBS Studio. This plug-in provides filters for users to create intricate and customized masks for their OBS Scenes and Sources.
+    - 🎭 Advanced Masks provides both Alpha Masking and Adjustment Masking and supports Windows, MacOS, and Linux.
+    - 🟠 Shape masks allow for dynamically generated Rectangle, Circle, Elliptical, Regular Polygon, Star, and Heart shaped masks, with many adjustable parameters.
+    - 🎥 Source Masks allow an existing OBS source to be used as a mask, using any combination of the red, green, blue, or alpha channels from said source.
+    - 🖼️ Image Masks include all of the same functionality as Source Masks, but applied via a static image (.png, .jpeg, etc).
+    - 🌈 Gradient Masks allow a fading mask using a user-specified gradient.
+
+grade: stable
+confinement: strict
+
+platforms:
+  amd64:
+
+slots:
+  obs-plugins:
+    interface: content
+    read:
+      - /usr/local/lib/obs-plugins
+
+  obs-plugins-data:
+    interface: content
+    read:
+      - /usr/local/data/obs-plugins
+
+parts:
+  advanced-masks:
+    source: https://github.com/FiniteSingularity/obs-advanced-masks.git
+    source-type: git
+    source-tag: v1.5.4
+    plugin: cmake
+    build-environment:
+      - CMAKE_PREFIX_PATH: "/snap/obs-studio/current/usr/"
+    build-packages:
+      - qt6-base-dev
+      - qt6-svg-dev
+      - libcurl4-gnutls-dev
+    build-snaps:
+      - obs-studio/latest/candidate
