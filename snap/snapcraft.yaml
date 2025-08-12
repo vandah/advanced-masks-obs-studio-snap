@@ -19,15 +19,15 @@ platforms:
 slots:
   obs-plugins:
     interface: content
-    read:
-      - /obs-plugins
+    source:
+      read:
+        - /${CRAFT_PROJECT_NAME}
 
 parts:
   prepare-hook:
     plugin: nil
     override-build: |
-      mkdir -p ${CRAFT_PART_INSTALL}/obs-plugins ${CRAFT_PART_INSTALL}/snap/hooks/
-      echo "${CRAFT_PROJECT_NAME}" > ${CRAFT_PART_INSTALL}/obs-plugins/snapname.txt
+      mkdir -p ${CRAFT_PART_INSTALL}/snap/hooks/
       echo -e '#!/bin/bash\nsnapctl set :obs-plugins snapname='"${CRAFT_PROJECT_NAME}" > ${CRAFT_PART_INSTALL}/snap/hooks/prepare-slot-obs-plugins
 
   advanced-masks:
@@ -44,5 +44,5 @@ parts:
     build-snaps:
       - obs-studio/latest/candidate
     organize:
-      usr/local/lib/obs-plugins/**/*.so: obs-plugins/plugins/
-      usr/local/data/obs-plugins: obs-plugins/data
+      usr/local/lib/obs-plugins/**/*.so: ${CRAFT_PROJECT_NAME}/plugins/
+      usr/local/data/obs-plugins: ${CRAFT_PROJECT_NAME}/data
