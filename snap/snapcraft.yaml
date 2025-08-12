@@ -1,4 +1,4 @@
-name: obs-studio-advanced-masks
+name: advanced-masks-obs-studio
 base: core24
 version: 'v1.5.4'
 summary: Filters for creating intricate and customized masks
@@ -20,14 +20,16 @@ slots:
   obs-plugins:
     interface: content
     read:
-      - /usr/local/lib/obs-plugins
-
-  obs-plugins-data:
-    interface: content
-    read:
-      - /usr/local/data/obs-plugins
+      - /obs-plugins
 
 parts:
+  prepare-hook:
+    plugin: nil
+    override-build: |
+      mkdir -p ${CRAFT_PART_INSTALL}/obs-plugins ${CRAFT_PART_INSTALL}/snap/hooks/
+      echo "${CRAFT_PROJECT_NAME}" > ${CRAFT_PART_INSTALL}/obs-plugins/snapname.txt
+      echo -e '#!/bin/bash\nsnapctl set :obs-plugins snapname='"${CRAFT_PROJECT_NAME}" > ${CRAFT_PART_INSTALL}/snap/hooks/prepare-slot-obs-plugins
+
   advanced-masks:
     source: https://github.com/FiniteSingularity/obs-advanced-masks.git
     source-type: git
@@ -41,3 +43,6 @@ parts:
       - libcurl4-gnutls-dev
     build-snaps:
       - obs-studio/latest/candidate
+    organize:
+      usr/local/lib/obs-plugins/**/*.so: obs-plugins/plugins/
+      usr/local/data/obs-plugins: obs-plugins/data
